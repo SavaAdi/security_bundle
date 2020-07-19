@@ -81,7 +81,7 @@ class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/findBeers"))
                 .andExpect(model().attributeExists("beer"));
-        verifyZeroInteractions(beerRepository);
+        verifyNoInteractions(beerRepository);
     }
 
     //ToDO: Mocking Page
@@ -135,7 +135,7 @@ class BeerControllerTest {
     }
 
     @Test
-    void processUpdationForm() throws Exception {
+    void processUpdatingForm() throws Exception {
         when(beerRepository.save(ArgumentMatchers.any())).thenReturn(Beer.builder().id(uuid).build());
 
         mockMvc.perform(post("/beers/"+uuid+"/edit"))
