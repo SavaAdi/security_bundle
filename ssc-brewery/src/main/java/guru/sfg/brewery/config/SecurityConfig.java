@@ -1,11 +1,16 @@
 package guru.sfg.brewery.config;
 
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             authorize
                     .antMatchers(ROOT_URL, WEB_JARS, LOGIN, RESOURCES).permitAll()
                     .antMatchers(BEER_SEARCH,BEER_SEARCH_NAME).permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll();
+                    .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
+                    .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll();
         })
                 .authorizeRequests()
                 .anyRequest()
@@ -35,4 +41,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic();
     }
 
+    @Override
+    @Bean //You need to mark it as a bean in order for it to be brought in the spring context
+    protected UserDetailsService userDetailsService() {
+        UserDetails admin = User.withDefaultPasswordEncoder()
+                .username("spring")
+                .password("guru")
+                .roles("ADMIN")
+                .build();
+
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("password")
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, user);
+    }
 }
