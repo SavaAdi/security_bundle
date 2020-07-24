@@ -13,7 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class PasswordEncodingTests {
 
     static final String PASSWORD = "password";
+    static final String ADMIN_PASSWORD = "security26%S";
 
+    @Test
+    void testBcrypt14() {
+        PasswordEncoder bCrypt = new BCryptPasswordEncoder(14);//default password strength is 10
+
+        System.out.println(bCrypt.encode(ADMIN_PASSWORD));
+        System.out.println(bCrypt.encode(ADMIN_PASSWORD));
+    }
 
     @Test
     void testBcrypt() {

@@ -8,8 +8,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import security.AdiPasswordEncoderFactories;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return AdiPasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 
@@ -49,11 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("spring")
-                .password("security") //you need to specify the password encoder (noop stores it as free text)
+                .password("{bcrypt14}$2a$14$b11rLt8CGq.UIttUDlANs.RmsjTY5MV33sbKtDRjy4cROjlPeLwhe") //you need to specify the password encoder (noop stores it as free text)
                 .roles("ADMIN")
                 .and()
                 .withUser("user")
-                .password("$2a$10$6mI3QjfBIlvwTm6xqu5xWOsPkln5oO4qFxrmCcfXDmguX8ECY.oV2")
+                .password("{sha256}977378b4618baf6e1c5093d082f82d0188a6396be86aeff8fbfebfb815697adb7ddadcdf9fd8131b")
                 .roles("USER");
     }
 
