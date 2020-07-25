@@ -40,6 +40,9 @@ public abstract class BaseIT {
 
     UUID uuid;
 
+    static final String PASSWORD = "password";
+    static final String ADMIN_PASSWORD = "security26%S";
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders

@@ -14,7 +14,7 @@ public class BeerControllerIT extends BaseIT{
 
     @Test
     void initCreationForm() throws Exception {
-        mockMvc.perform(get("/beers/new").with(httpBasic("user", "password")))
+        mockMvc.perform(get("/beers/new").with(httpBasic("user", PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/createBeer"))
                 .andExpect(model().attributeExists("beer"));
@@ -33,7 +33,7 @@ public class BeerControllerIT extends BaseIT{
 //    This creates a http header with that credentials encoded
     @Test
     void findBeersHttpBasic() throws Exception{
-        mockMvc.perform(get("/beers/find").with(httpBasic("spring","security26%S")))
+        mockMvc.perform(get("/beers/find").with(httpBasic("spring", ADMIN_PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("beers/findBeers"))
                 .andExpect(model().attributeExists("beer"));
