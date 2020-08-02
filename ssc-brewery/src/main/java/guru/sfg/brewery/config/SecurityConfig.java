@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(restHeaderAuthFilter(authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class)//Adds this before the UsernamePasswordAuthenticationFilter
 //        in the security filter chain
-        .csrf().disable(); //disable csrf
+        .csrf().disable(); //disable csrf globally, so you need to do it only once! Don't disable it in the other headers too
 
         http.authorizeRequests(authorize -> {
             authorize
