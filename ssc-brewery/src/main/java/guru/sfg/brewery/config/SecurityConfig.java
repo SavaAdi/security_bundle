@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests(authorize -> {
             authorize
+                    .antMatchers("/h2-console/**").permitAll() // Remove in production
                     .antMatchers(ROOT_URL, WEB_JARS, LOGIN, RESOURCES).permitAll()
                     .antMatchers(BEER_SEARCH,BEER_SEARCH_NAME).permitAll()
                     .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
@@ -57,6 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated().and()
                 .formLogin().and()
                 .httpBasic();
+
+        //h2 console config
+        http.headers().frameOptions().sameOrigin();
     }
 
     @Override
