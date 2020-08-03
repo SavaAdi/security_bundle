@@ -20,6 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String RESOURCES = "/resources/**";
     public static final String BEER_SEARCH = "/beers/find";
     public static final String BEER_SEARCH_NAME = "/beers*";
+    public static final String BEER_API = "/api/v1/beer/**";
+    public static final String BREWERY = "/brewery/breweries/**";
+    public static final String BREWERY_API = "/brewery/api/v1/breweries/**";
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -35,8 +38,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/h2-console/**").permitAll() // Remove in production
                     .antMatchers(ROOT_URL, WEB_JARS, LOGIN, RESOURCES).permitAll()
                     .antMatchers(BEER_SEARCH,BEER_SEARCH_NAME).permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
-                    .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll();
+                    .antMatchers(HttpMethod.GET, BEER_API).permitAll()
+                    .mvcMatchers(HttpMethod.DELETE, BEER_API).hasAnyRole("ADMIN")
+                    //mvc is more secure than ant because of how it considers matching (matches on some variations
+                    // of the pattern too, such as /securePathXYZ, /securePathXYZ/, /securePathXYZ.html etc., while ant will
+                    // only match for /securePathXYZ)
+                    .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll()
+                    .mvcMatchers(BREWERY).hasAnyRole("ADMIN", "CUSTOMER")
+                    .mvcMatchers(HttpMethod.GET, BREWERY_API).hasAnyRole("ADMIN", "CUSTOMER");
         })
                 .authorizeRequests()
                 .anyRequest()
