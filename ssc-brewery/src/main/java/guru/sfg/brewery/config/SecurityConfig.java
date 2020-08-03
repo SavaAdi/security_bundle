@@ -37,13 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             authorize
                     .antMatchers("/h2-console/**").permitAll() // Remove in production
                     .antMatchers(ROOT_URL, WEB_JARS, LOGIN, RESOURCES).permitAll()
-                    .antMatchers(BEER_SEARCH,BEER_SEARCH_NAME).permitAll()
-                    .antMatchers(HttpMethod.GET, BEER_API).permitAll()
+                    .mvcMatchers(BEER_SEARCH, BEER_SEARCH_NAME, "/beers/{beerID}").hasAnyRole("ADMIN", "CUSTOMER", "USER")
+                    .antMatchers(HttpMethod.GET, BEER_API).hasAnyRole("ADMIN", "CUSTOMER", "USER")
                     .mvcMatchers(HttpMethod.DELETE, BEER_API).hasAnyRole("ADMIN")
                     //mvc is more secure than ant because of how it considers matching (matches on some variations
                     // of the pattern too, such as /securePathXYZ, /securePathXYZ/, /securePathXYZ.html etc., while ant will
                     // only match for /securePathXYZ)
-                    .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll()
+                    .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").hasAnyRole("ADMIN", "CUSTOMER", "USER")
                     .mvcMatchers(BREWERY).hasAnyRole("ADMIN", "CUSTOMER")
                     .mvcMatchers(HttpMethod.GET, BREWERY_API).hasAnyRole("ADMIN", "CUSTOMER");
         })
