@@ -1,15 +1,16 @@
 package guru.sfg.brewery.bootstrap;
 
-import guru.sfg.brewery.config.SecurityConfig;
 import guru.sfg.brewery.domain.security.Authority;
 import guru.sfg.brewery.domain.security.User;
 import guru.sfg.brewery.repositories.security.AuthorityRepository;
 import guru.sfg.brewery.repositories.security.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@Log4j2
 @RequiredArgsConstructor
 @Component
 public class UserDataLoader implements CommandLineRunner {
@@ -44,6 +45,8 @@ public class UserDataLoader implements CommandLineRunner {
                 .username("scott")
                 .password(passwordEncoder.encode("tiger"))
                 .authority(customer).build());
+
+        log.debug(() -> "Loaded " + userRepository.count() + " users.");
     }
 
 

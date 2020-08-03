@@ -1,4 +1,4 @@
-package security;
+package guru.sfg.brewery.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.*;
@@ -15,7 +15,8 @@ public class AdiPasswordEncoderFactories {
     }
 
     public static PasswordEncoder createDelegatingPasswordEncoder() {
-        String encodingId = "bcrypt14";
+
+        String encodingId = "bcrypt12";
         Map<String, PasswordEncoder> encoders = new HashMap();
         encoders.put(encodingId, new BCryptPasswordEncoder(12));
         encoders.put("ldap", new LdapShaPasswordEncoder());

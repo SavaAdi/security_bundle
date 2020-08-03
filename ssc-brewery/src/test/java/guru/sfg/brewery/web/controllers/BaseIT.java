@@ -41,7 +41,7 @@ public abstract class BaseIT {
     UUID uuid;
 
     static final String PASSWORD = "password";
-    static final String ADMIN_PASSWORD = "security26%S";
+    static final String ADMIN_PASSWORD = "guru";
 
     @BeforeEach
     void setUp() {
