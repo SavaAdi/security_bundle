@@ -4,7 +4,6 @@ package guru.sfg.brewery.config;
 import guru.sfg.brewery.security.AdiPasswordEncoderFactories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) //Enable @Secured annotation
+@EnableGlobalMethodSecurity(prePostEnabled = true) //Enable @PreAuthorized annotation
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String ROOT_URL = "/";
@@ -31,22 +30,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return AdiPasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests(authorize -> {
             authorize
                     .antMatchers("/h2-console/**").permitAll() // Remove in production
-                    .antMatchers(ROOT_URL, WEB_JARS, LOGIN, RESOURCES).permitAll()
-                    .mvcMatchers(BEER_SEARCH, BEER_SEARCH_NAME, "/beers/{beerID}").hasAnyRole("ADMIN", "CUSTOMER", "USER")
-                    .antMatchers(HttpMethod.GET, BEER_API).hasAnyRole("ADMIN", "CUSTOMER", "USER")
-                    //mvc is more secure than ant because of how it considers matching (matches on some variations
-                    // of the pattern too, such as /securePathXYZ, /securePathXYZ/, /securePathXYZ.html etc., while ant will
-                    // only match for /securePathXYZ)
-                    .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").hasAnyRole("ADMIN", "CUSTOMER", "USER")
-                    .mvcMatchers(BREWERY).hasAnyRole("ADMIN", "CUSTOMER")
-                    .mvcMatchers(HttpMethod.GET, BREWERY_API).hasAnyRole("ADMIN", "CUSTOMER");
+                    .antMatchers(ROOT_URL, WEB_JARS, LOGIN, RESOURCES).permitAll();
         })
                 .authorizeRequests()
                 .anyRequest()
