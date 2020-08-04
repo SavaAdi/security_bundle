@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) //Enable @Secured annotation
+@EnableGlobalMethodSecurity(prePostEnabled = true) //Enable @Secured annotation
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String ROOT_URL = "/";
@@ -41,7 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(ROOT_URL, WEB_JARS, LOGIN, RESOURCES).permitAll()
                     .mvcMatchers(BEER_SEARCH, BEER_SEARCH_NAME, "/beers/{beerID}").hasAnyRole("ADMIN", "CUSTOMER", "USER")
                     .antMatchers(HttpMethod.GET, BEER_API).hasAnyRole("ADMIN", "CUSTOMER", "USER")
-                    .mvcMatchers(HttpMethod.DELETE, BEER_API).hasAnyRole("ADMIN")
                     //mvc is more secure than ant because of how it considers matching (matches on some variations
                     // of the pattern too, such as /securePathXYZ, /securePathXYZ/, /securePathXYZ.html etc., while ant will
                     // only match for /securePathXYZ)
