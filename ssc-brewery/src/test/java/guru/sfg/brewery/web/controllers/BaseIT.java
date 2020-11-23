@@ -16,10 +16,10 @@ public abstract class BaseIT {
     @Autowired
     WebApplicationContext wac;
 
-    MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
-    static final String PASSWORD = "password";
-    static final String ADMIN_PASSWORD = "guru";
+    protected static final String PASSWORD = "password";
+    protected static final String ADMIN_PASSWORD = "guru";
 
     @BeforeEach
     void setUp() {
