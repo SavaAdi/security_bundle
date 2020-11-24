@@ -22,7 +22,7 @@ public abstract class BaseIT {
     protected static final String ADMIN_PASSWORD = "guru";
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .apply(springSecurity())
