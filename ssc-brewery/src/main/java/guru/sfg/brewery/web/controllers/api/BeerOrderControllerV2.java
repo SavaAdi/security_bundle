@@ -6,13 +6,16 @@ import guru.sfg.brewery.services.BeerOrderService;
 import guru.sfg.brewery.web.model.BeerOrderDto;
 import guru.sfg.brewery.web.model.BeerOrderPagedList;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
-
+@Log4j2
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v2/orders/")
@@ -45,10 +48,16 @@ public class BeerOrderControllerV2 {
     }
 
     @BeerOrderReadPermissionV2
-    @GetMapping("orders/{orderId}")
+    @GetMapping("{orderId}")
     public BeerOrderDto getOrder(@PathVariable("orderId") UUID orderId){
+        var beerOrderDto = beerOrderService.getOrderById(orderId);
 
-        return null;
-        //  return beerOrderService.getOrderById(orderId);
+        if (beerOrderDto == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order Not Found");
+        }
+
+        log.debug(() -> "Found order: " + beerOrderDto);
+
+        return beerOrderDto;
     }
 }
